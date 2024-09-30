@@ -2,7 +2,7 @@ import app from "./app";
 import { PORT } from "./config";
 import { connectDB } from "./db";
 
-async function main() {
+export async function main() {
   try {
     await connectDB().catch(console.dir);
     app.listen(PORT);
@@ -13,4 +13,3 @@ async function main() {
   }
 }
 
-main();
