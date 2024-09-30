@@ -1,12 +1,15 @@
-import express from "express";
+import express,{Application} from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes";
 import taksRoutes from "./routes/tasks.routes";
 import { FRONTEND_URL } from "./config.js";
 
-const app = express();
+const app: Application = express();
+dotenv.config();
 
 // app.use(
 //   cors({
