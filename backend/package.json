@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "MONGODB_URI=mongodb+srv://fitkro:lQ87dPzG6DCWUbwX@tuskusapi.dahkp.mongodb.net/tuskus?retryWrites=true&w=majority&appName=tuskusapi node dist/index.js",
     "dev:nodemon": "nodemon ./dist/server.js",
     "dev": "nodemon src/index.ts"
   },
