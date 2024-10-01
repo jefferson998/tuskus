@@ -6,6 +6,7 @@ import { CookiesProvider } from "react-cookie";
 import { Provider } from 'react-redux';
 import store from './_store';
 
+
 function App() {
   return (
     <>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import {URL_API} from '../config'
 
 function RegisterPage() {
   const [username, setUsername] = useState(""); // Estado para el nombre de usuario
@@ -25,7 +26,7 @@ function RegisterPage() {
 
     try {
       // Hacer la solicitud POST para registrar un nuevo usuario
-       await axios.post("http://localhost:4000/api/auth/register", {
+       await axios.post(URL_API+"/api/auth/register", {
         username,
         email,
         password,

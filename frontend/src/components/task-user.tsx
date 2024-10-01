@@ -9,6 +9,7 @@ import { fetchTasks, addTask } from "../_store/tasksSlice"; // Asegúrate de que
 import { MdClose } from "react-icons/md";
 import emptyStateSvg from "../../public/empty_state.svg";
 import { AppDispatch, RootState } from "../_store";
+import {URL_API} from '../config'
 
 function TaskUserPage() {
   const [newTitle, setNewTitle] = useState(""); // Estado para el nombre de la nueva tarea
@@ -56,7 +57,7 @@ function TaskUserPage() {
 
   const deleteTask = async (taskId: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/tasks/${taskId}`, {
+      await axios.delete(`${URL_API}/api/tasks/${taskId}`, {
         headers: {
           token: cookie.token, // Enviar el token en el header
         },

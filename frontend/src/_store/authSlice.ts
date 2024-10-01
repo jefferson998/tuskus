@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import {URL_API} from '../config'
+
 
 interface LoginResponse {
   token: string;
@@ -14,7 +16,8 @@ interface LoginCredentials {
 export const login = createAsyncThunk<LoginResponse, LoginCredentials>(
   'auth/login',
   async (credentials) => {
-    const response = await axios.post('http://localhost:4000/api/auth/login', credentials);
+    const api = URL_API
+    const response = await axios.post(api+'/api/auth/login', credentials);
     return response.data as LoginResponse; // Devuelve los datos del token
   }
 );

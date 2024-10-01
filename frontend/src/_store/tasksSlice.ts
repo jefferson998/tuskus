@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import {URL_API} from '../config'
 
 // Acción asíncrona para obtener tareas
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (token:string) => {
-  const response = await axios.get("http://localhost:4000/api/tasks", {
+  const response = await axios.get(URL_API+"/api/tasks", {
     headers: {
       token, // Aquí se envía el token directamente en los headers
     },
@@ -14,7 +15,7 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (token:stri
 // Acción asíncrona para agregar una nueva tarea
 export const addTask = createAsyncThunk('tasks/addTask', async ({ title, description, progress, token }:{ title:string, description:string, progress:string, token:string }) => {
   const response = await axios.post(
-    "http://localhost:4000/api/tasks",
+    URL_API+"/api/tasks",
     { title, description, progress },
     { headers: { token } }
   );
