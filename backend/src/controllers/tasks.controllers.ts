@@ -47,10 +47,10 @@ export const deleteTask = async (req: any, res: Response):Promise<void> => {
 
 export const updateTask = async (req: any, res: Response):Promise<void> => {
   try {
-    const { title, description, date } = req.body;
+    const { title, description,progress, date } = req.body;
     const taskUpdated = await Task.findOneAndUpdate(
       { _id: req.params.id },
-      { title, description, date },
+      { title, description,progress, date },
       { new: true }
     );
 
