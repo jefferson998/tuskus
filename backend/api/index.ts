@@ -1,4 +1,4 @@
-import {main} from "../src/server";
-export default main();
+import app from "../src/server";
+export default app;
 
 

@@ -1,12 +1,26 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
+import { logout } from '../_store/authSlice'; // Asegúrate de que la ruta sea correcta
 
 const Navbar = () => {
+  const [cookies, , removeCookie] = useCookies();
+  const dispatch = useDispatch(); // Para despachar la acción de logout
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
+    console.log("cerrar sesión");
+    console.log(cookies.token);
+    
+    // Eliminar la cookie de token
+    removeCookie('token'); 
+
+    // Despachar la acción de logout de Redux (opcional, si tienes lógica para manejar el estado de autenticación)
+    dispatch(logout());
+
+    // Redirigir a la página de inicio de sesión
+    navigate('/sign-in'); 
   };
 
   return (
@@ -30,7 +44,7 @@ const Navbar = () => {
       <div className="hidden md:flex items-center">
         <button
           onClick={handleLogout}
-          className="bg-primary-light/50 hover:bg-primary-light/60 text-white px-4 py-2 rounded-md transition">
+          className=" border-2 border-white/60 text-white px-4 py-2 rounded-md transition">
           Cerrar Sesión
         </button>
       </div>
@@ -46,6 +60,23 @@ const Navbar = () => {
 // Mobile menu component
 const MobileMenu = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [cookies, , removeCookie] = useCookies();
+  const dispatch = useDispatch(); // Para despachar la acción de logout
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    console.log("cerrar sesión");
+    console.log(cookies.token);
+    
+    // Eliminar la cookie de token
+    removeCookie('token');
+
+    // Despachar la acción de logout de Redux (opcional, si tienes lógica para manejar el estado de autenticación)
+    dispatch(logout());
+
+    // Redirigir a la página de inicio de sesión
+    navigate('/sign-in');
+  };
 
   return (
     <>
@@ -70,19 +101,16 @@ const MobileMenu = () => {
       </button>
 
       {menuOpen && (
-        <div className="absolute top-16 right-0 mt-2 w-48 bg-primary-dark shadow-lg rounded-lg py-2 text-white">
-          <Link to="/tasks" className="block px-4 py-2 hover:bg-gray-700 transition">
+        <div className="absolute top-16 right-0 mt-2 w-48 bg-primary-dark shadow-lg rounded-lg py-2 text-white/80">
+          <Link to="/user-tasks" className="block px-4 py-2 hover:bg-light/50 transition">
             Tareas
           </Link>
-          <Link to="/profile" className="block px-4 py-2 hover:bg-gray-700 transition">
+          <Link to="/profile" className="block px-4 py-2 hover:bg-light/50 transition">
             Perfil
           </Link>
           <button
-            onClick={() => {
-              localStorage.removeItem('token');
-              window.location.reload();
-            }}
-            className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
+            onClick={handleLogout}
+            className="block w-full text-left px-4 py-2 hover:text-white/90 transition"
           >
             Cerrar Sesión
           </button>

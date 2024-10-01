@@ -46,6 +46,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       id: userSaved?._id,
       username: userSaved?.username,
       email: userSaved?.email,
+      token:token
     });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -87,6 +88,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       id: userFound?._id,
       username: userFound?.username,
       email: userFound?.email,
+      token:token
     });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -129,4 +131,8 @@ export const logout = async (req:any, res:any) => {
     expires: new Date(0),
   });
   return res.sendStatus(200);
+};
+
+export const example = (req: Request, res: Response): void => {
+  res.status(200).json({ message: "Hello Tuskus world" });
 };
