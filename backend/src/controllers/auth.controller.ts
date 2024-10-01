@@ -131,7 +131,6 @@ export const logout = async (req:any, res:any) => {
   return res.sendStatus(200);
 };
 
-export const example = (res: Response):void =>{
-    res.status(200).json({ message: "Hello Tuskus world" });
-  
-}
+export const example = (req: Request, res: Response): void => {
+  res.status(200).json({ message: "Hello Tuskus world" });
+};

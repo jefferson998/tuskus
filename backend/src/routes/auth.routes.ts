@@ -15,7 +15,7 @@ router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.get("/verify", verifyToken);
 router.post("/logout", verifyToken, logout);
-router.get("/",example );
+router.get("/example",example );
 
 
 export default router;
