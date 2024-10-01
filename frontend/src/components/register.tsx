@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 function RegisterPage() {
@@ -10,7 +10,7 @@ function RegisterPage() {
   const [success, setSuccess] = useState(""); // Estado para manejar éxito
   const [loading, setLoading] = useState(false); // Estado para manejar carga
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e:any) => {
     e.preventDefault(); // Evitar que el formulario recargue la página
     setError(""); // Limpiar errores anteriores
     setSuccess(""); // Limpiar mensajes de éxito
@@ -25,7 +25,7 @@ function RegisterPage() {
 
     try {
       // Hacer la solicitud POST para registrar un nuevo usuario
-      const response = await axios.post("http://localhost:4000/api/auth/register", {
+       await axios.post("http://localhost:4000/api/auth/register", {
         username,
         email,
         password,
@@ -37,7 +37,7 @@ function RegisterPage() {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-    } catch (err) {
+    } catch (err:any) {
       setError(err.response?.data?.message || "Error al registrar."); // Manejo de errores
       console.error("Error registering:", err);
     } finally {

@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, clearMessages } from "../_store/authSlice"; // Asegúrate de la ruta correcta
 import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
+import { AppDispatch, RootState } from "../_store";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch:AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookie, setCookie] = useCookies();
+  const [, setCookie] = useCookies();
   
-  const { error, success, loading, token } = useSelector((state) => state.auth); // Selecciona el estado de autenticación
+  const { error, success, loading, token } = useSelector((state:RootState) => state.auth); // Selecciona el estado de autenticación
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../_store/authSlice'; // Asegúrate de que la ruta sea correcta
 
 const Navbar = () => {
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, , removeCookie] = useCookies();
   const dispatch = useDispatch(); // Para despachar la acción de logout
   const navigate = useNavigate();
 
@@ -60,7 +60,7 @@ const Navbar = () => {
 // Mobile menu component
 const MobileMenu = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, , removeCookie] = useCookies();
   const dispatch = useDispatch(); // Para despachar la acción de logout
   const navigate = useNavigate();
 

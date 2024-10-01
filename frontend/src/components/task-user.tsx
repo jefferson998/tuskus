@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, addTask } from "../_store/tasksSlice"; // Asegúrate de que la ruta sea correcta
 import { MdClose } from "react-icons/md";
 import emptyStateSvg from "../../public/empty_state.svg";
+import { AppDispatch, RootState } from "../_store";
 
 function TaskUserPage() {
   const [newTitle, setNewTitle] = useState(""); // Estado para el nombre de la nueva tarea
@@ -16,10 +17,12 @@ function TaskUserPage() {
   const [modalOpen, setModalOpen] = useState(false); // Estado para el modal
   const navigate = useNavigate();
   const [cookie] = useCookies();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   // Obtener tareas y estado de carga del store de Redux
-  const { tasks = [], loading } = useSelector((state) => state.tasks || {});
+  const { tasks = [], loading } = useSelector(
+    (state: RootState) => state.tasks || {}
+  );
 
   useEffect(() => {
     if (!cookie.token) {
@@ -51,7 +54,7 @@ function TaskUserPage() {
     }
   };
 
-  const deleteTask = async (taskId) => {
+  const deleteTask = async (taskId: string) => {
     try {
       await axios.delete(`http://localhost:4000/api/tasks/${taskId}`, {
         headers: {
@@ -128,26 +131,18 @@ function TaskUserPage() {
                       background: `linear-gradient(to right, #ffffff ${newProgreso}%, #4a4a4a ${newProgreso}%)`, // Progreso dinámico
                     }}
                   />
+                  <style>
+                    {`
+      input[type="range"]::-webkit-slider-thumb {
+        @apply appearance-none w-4 h-4 rounded-full bg-white cursor-pointer; /* Color blanco para el thumb */
+      }
+      input[type="range"]::-moz-range-thumb {
+        @apply w-4 h-4 rounded-full bg-white cursor-pointer; /* Color blanco para el thumb */
+      }
+    `}
+                  </style>
                 </div>
 
-                <style jsx>{`
-                  input[type="range"]::-webkit-slider-thumb {
-                    appearance: none;
-                    width: 16px;
-                    height: 16px;
-                    border-radius: 50%;
-                    background: #ffffff; /* Color blanco para el thumb */
-                    cursor: pointer;
-                  }
-
-                  input[type="range"]::-moz-range-thumb {
-                    width: 16px;
-                    height: 16px;
-                    border-radius: 50%;
-                    background: #ffffff; /* Color blanco para el thumb */
-                    cursor: pointer;
-                  }
-                `}</style>
                 <button
                   type="submit"
                   className={`bg-primary-light mt-4 text-white px-4 py-2 rounded-md transition ${
@@ -175,7 +170,7 @@ function TaskUserPage() {
             </div>
           ) : (
             <ul className="rounded-lg flex flex-col space-y-4">
-              {tasks.map((task) => (
+              {tasks.map((task: any) => (
                 <li
                   key={task._id}
                   className="bg-primary-dark/80 p-2 my-2 rounded-lg shadow-xl relative"

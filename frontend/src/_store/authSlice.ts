@@ -1,10 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const login = createAsyncThunk('auth/login', async (credentials: { email: string; password: string }) => {
-  const response = await axios.post('http://localhost:4000/api/auth/login', credentials);
-  return response.data; // Devuelve los datos del token
-});
+interface LoginResponse {
+  token: string;
+  // otros posibles datos que devuelve el login
+}
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export const login = createAsyncThunk<LoginResponse, LoginCredentials>(
+  'auth/login',
+  async (credentials) => {
+    const response = await axios.post('http://localhost:4000/api/auth/login', credentials);
+    return response.data as LoginResponse; // Devuelve los datos del token
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',

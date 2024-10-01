@@ -12,7 +12,7 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (token:stri
 });
 
 // Acción asíncrona para agregar una nueva tarea
-export const addTask = createAsyncThunk('tasks/addTask', async ({ title, description, progress, token }) => {
+export const addTask = createAsyncThunk('tasks/addTask', async ({ title, description, progress, token }:{ title:string, description:string, progress:string, token:string }) => {
   const response = await axios.post(
     "http://localhost:4000/api/tasks",
     { title, description, progress },
@@ -44,7 +44,7 @@ const tasksSlice = createSlice({
         state.loading = false;
         state.tasks = action.payload;
       })
-      .addCase(fetchTasks.rejected, (state, action) => {
+      .addCase(fetchTasks.rejected, (state:any, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
@@ -52,11 +52,11 @@ const tasksSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(addTask.fulfilled, (state, action) => {
+      .addCase(addTask.fulfilled, (state:any, action:any) => {
         state.loading = false;
         state.tasks.push(action.payload); // Agrega la nueva tarea al estado
       })
-      .addCase(addTask.rejected, (state, action) => {
+      .addCase(addTask.rejected, (state:any, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
