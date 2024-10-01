@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 export const auth = (req: any, res: Response, next: NextFunction): void => {
   try {
     // console.log(req);
-    // console.log(JSON.stringify(req.cookies));
+    console.log(JSON.stringify(req.cookies));
     console.log(req.headers.token);
     
     const token = req.headers.token;

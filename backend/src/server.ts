@@ -7,18 +7,18 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes";
 import taksRoutes from "./routes/tasks.routes";
-import { FRONTEND_URL } from "./config.js";
+import { FRONTEND_URL } from "./config";
 import { connectDB } from "./db";
 
 const app: Application = express();
 dotenv.config();
 
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: FRONTEND_URL,
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    origin: FRONTEND_URL,
+  })
+);
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
