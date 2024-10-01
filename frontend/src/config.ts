@@ -1,1 +1,1 @@
-export const URL_API = import.meta.env?.URL_API || "http://localhost:4000"
+export const URL_API = import.meta.env?.URL_API || "https://tuskus.vercel.app"
