@@ -1,0 +1,43 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Docker Buildx (for multi-platform builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build and start the containers
+      - name: Build and run Docker Compose services
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
+          
+      # Wait for the services to start up
+      - name: Wait for services to be ready
+        run: sleep 20
+
+      # Run backend tests
+      - name: Run backend tests
+        run: docker-compose exec backend npm run test
+
+      # Run frontend tests
+      - name: Run frontend tests
+        run: docker-compose exec frontend npm run test
+
+      # Shutdown the Docker Compose services
+      - name: Shutdown Docker Compose
+        run: docker-compose down
