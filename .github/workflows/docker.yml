@@ -21,10 +21,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      # Install Docker Compose
+      - name: Install Docker Compose
+        run: sudo apt-get update && sudo apt-get install docker-compose-plugin -y
+
       # Build and start the containers
       - name: Build and run Docker Compose services
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          docker compose -f docker-compose.yml up --build -d
           
       # Wait for the services to start up
       - name: Wait for services to be ready
@@ -32,12 +36,12 @@ jobs:
 
       # Run backend tests
       - name: Run backend tests
-        run: docker-compose exec backend npm run test
+        run: docker compose exec backend npm run test
 
       # Run frontend tests
       - name: Run frontend tests
-        run: docker-compose exec frontend npm run test
+        run: docker compose exec frontend npm run test
 
       # Shutdown the Docker Compose services
       - name: Shutdown Docker Compose
-        run: docker-compose down
+        run: docker compose down
