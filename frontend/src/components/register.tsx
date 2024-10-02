@@ -1,49 +1,55 @@
-import { useState } from 'react';
-import axios from 'axios';
-import {URL_API} from '../config'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../_store/registerSlice'; // Ensure this path is correct
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
+import { AppDispatch } from '../_store';
 
 function RegisterPage() {
-  const [username, setUsername] = useState(""); // Estado para el nombre de usuario
-  const [email, setEmail] = useState(""); // Estado para el correo electrónico
-  const [password, setPassword] = useState(""); // Estado para la contraseña
-  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmar la contraseña
-  const [error, setError] = useState(""); // Estado para manejar errores
-  const [success, setSuccess] = useState(""); // Estado para manejar éxito
-  const [loading, setLoading] = useState(false); // Estado para manejar carga
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(""); // State for password mismatch error
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
+  const [, setCookie] = useCookies();
 
-  const handleRegister = async (e:any) => {
-    e.preventDefault(); // Evitar que el formulario recargue la página
-    setError(""); // Limpiar errores anteriores
-    setSuccess(""); // Limpiar mensajes de éxito
-    setLoading(true); // Iniciar carga
+  const { loading, error, success, token } = useSelector((state: any) => state.register);
 
-    // Validación básica de contraseña
+  useEffect(() => {
+    if (token) {
+      setCookie('token', token);
+      navigate('/user-tasks');
+    }
+  }, [token, setCookie, navigate]);
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isFormValid = () => {
+    return username && isValidEmail(email) && password && confirmPassword;
+  };
+
+  const handleRegister = async (e: any) => {
+    e.preventDefault();
+
     if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden.");
-      setLoading(false); // Detener carga
+      setPasswordMatchError("Passwords do not match."); 
       return;
     }
 
-    try {
-      // Hacer la solicitud POST para registrar un nuevo usuario
-       await axios.post(URL_API+"/api/auth/register", {
-        username,
-        email,
-        password,
-      });
+   
+    setPasswordMatchError("");
 
-      setSuccess("Registro exitoso. Puedes iniciar sesión."); // Mensaje de éxito
-      // Limpiar los campos después del registro
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-    } catch (err:any) {
-      setError(err.response?.data?.message || "Error al registrar."); // Manejo de errores
-      console.error("Error registering:", err);
-    } finally {
-      setLoading(false); // Detener carga
+    if (!isFormValid()) {
+      return; 
     }
+
+    const userData = { username, email, password };
+    dispatch(registerUser(userData)); 
   };
 
   return (
@@ -60,12 +66,9 @@ function RegisterPage() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleRegister} className="space-y-6">
-          {/* Campo de Username */}
+          {/* Input para Username */}
           <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium leading-6 text-white/80"
-            >
+            <label htmlFor="username" className="block text-sm font-medium leading-6 text-white/80">
               Username
             </label>
             <div className="mt-2">
@@ -74,20 +77,17 @@ function RegisterPage() {
                 name="username"
                 type="text"
                 required
-                value={username} // Bind de estado
-                onChange={(e) => setUsername(e.target.value)} // Manejar cambios en el input
-                disabled={loading} // Deshabilitar si está cargando
+                placeholder='tusks123'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={loading}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
             </div>
           </div>
 
-          {/* Campo de Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-white/80"
-            >
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-white/80">
               Email address
             </label>
             <div className="mt-2">
@@ -96,22 +96,19 @@ function RegisterPage() {
                 name="email"
                 type="email"
                 required
+                placeholder='correo@email.com'
                 autoComplete="email"
-                value={email} // Bind de estado
-                onChange={(e) => setEmail(e.target.value)} // Manejar cambios en el input
-                disabled={loading} // Deshabilitar si está cargando
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
             </div>
           </div>
 
-          {/* Campo de Password */}
           <div>
             <div className="flex items-center justify-between ">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-white/80"
-              >
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white/80">
                 Password
               </label>
             </div>
@@ -121,22 +118,19 @@ function RegisterPage() {
                 name="password"
                 type="password"
                 required
+                placeholder='Password1234'
                 autoComplete="current-password"
-                value={password} // Bind de estado
-                onChange={(e) => setPassword(e.target.value)} // Manejar cambios en el input
-                disabled={loading} // Deshabilitar si está cargando
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
             </div>
           </div>
 
-          {/* Campo de Confirm Password */}
           <div>
             <div className="flex items-center justify-between">
-              <label
-                htmlFor="confirm-password"
-                className="block text-sm font-medium leading-6 text-white/80"
-              >
+              <label htmlFor="confirm-password" className="block text-sm font-medium leading-6 text-white/80">
                 Confirm Password
               </label>
             </div>
@@ -145,11 +139,12 @@ function RegisterPage() {
                 id="confirm-password"
                 name="confirm-password"
                 type="password"
+                placeholder='Password1234'
                 required
                 autoComplete="current-password"
-                value={confirmPassword} // Bind de estado
-                onChange={(e) => setConfirmPassword(e.target.value)} // Manejar cambios en el input
-                disabled={loading} // Deshabilitar si está cargando
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={loading}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
             </div>
@@ -158,20 +153,17 @@ function RegisterPage() {
           <div>
             <button
               type="submit"
-              disabled={loading} // Deshabilitar si está cargando
-              className={`flex w-full justify-center rounded-md ${loading ? 'bg-gray-500' : 'bg-primary-light/90'} px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-light/95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+              disabled={loading || !isFormValid()}
+              className={`flex w-full justify-center rounded-md ${loading ? 'bg-gray-500' : (isFormValid() ? 'bg-primary-light/90' : 'bg-primary-dark')} px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
-              {/* {loading ? (
-                <></> // Muestra el loader si está cargando
-              ) : ( */}
-                Register
-              {/* )} */}
+              {loading ? "Loading ..." : "Register"}
             </button>
           </div>
         </form>
 
-        {error && <p className="mt-4 text-center text-sm text-red-500">{error}</p>} {/* Mensaje de error */}
-        {success && <p className="mt-4 text-center text-sm text-green-500">{success}</p>} {/* Mensaje de éxito */}
+        {error && <p className="mt-4 text-center text-sm text-red-500">{error}</p>}
+        {success && <p className="mt-4 text-center text-sm text-green-500">{success}</p>}
+        {passwordMatchError && <p className="mt-4 text-center text-sm text-red-500">{passwordMatchError}</p>} {/* Display password match error */}
 
         <p className="mt-10 text-center text-sm text-white/80">
           Already a member?{" "}

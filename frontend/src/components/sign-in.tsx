@@ -14,22 +14,24 @@ function SignIn() {
   
   const { error, success, loading, token } = useSelector((state:RootState) => state.auth); // Selecciona el estado de autenticación
 
+  console.log("error "+error);
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(clearMessages()); // Limpiar mensajes anteriores
-    dispatch(login({ email, password })); // Disparar la acción de login
+    dispatch(clearMessages()); 
+    dispatch(login({ email, password })); 
   };
 
   useEffect(() => {
     if (token) {
-      setCookie('token', token); // Guardar el token en las cookies
-      navigate('/user-tasks'); // Redirigir después del inicio de sesión
+      setCookie('token', token); 
+      navigate('/user-tasks'); 
     }
   }, [token, setCookie, navigate]);
 
-  // Validación del formato de email
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Expresión regular para validar el formato de email
-  const isFormValid = isEmailValid && password; // Valida que el email sea válido y que la contraseña esté llena
+  
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isFormValid = isEmailValid && password; 
 
   return (
     <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-primary-dark">

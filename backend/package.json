@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "MONGODB_URI=mongodb+srv://fitkro:lQ87dPzG6DCWUbwX@tuskusapi.dahkp.mongodb.net/tuskus?retryWrites=true&w=majority&appName=tuskusapi node dist/index.js",
-    "dev:nodemon": "nodemon ./src/server.ts",
-    "dev": "nodemon src/index.ts"
+    "start": "node dist/server.js",
+    "dev": "nodemon ./src/server.ts",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,8 @@
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
     "morgan": "^1.10.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -28,10 +30,12 @@
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.7.4",
     "express": "^4.21.0",
+    "jest": "^29.5.0",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"

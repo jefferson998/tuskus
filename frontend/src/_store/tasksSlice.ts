@@ -2,27 +2,27 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {URL_API} from '../config'
 
-// Acción asíncrona para obtener tareas
+
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (token:string) => {
   const response = await axios.get(URL_API+"/api/tasks", {
     headers: {
-      token, // Aquí se envía el token directamente en los headers
+      token, 
     },
   });
-  return response.data; // Devuelve la lista de tareas
+  return response.data; 
 });
 
-// Acción asíncrona para agregar una nueva tarea
+
 export const addTask = createAsyncThunk('tasks/addTask', async ({ title, description, progress, token }:{ title:string, description:string, progress:string, token:string }) => {
   const response = await axios.post(
     URL_API+"/api/tasks",
     { title, description, progress },
     { headers: { token } }
   );
-  return response.data; // Devuelve la tarea agregada
+  return response.data; 
 });
 
-// Slice de tareas
+
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
@@ -55,7 +55,7 @@ const tasksSlice = createSlice({
       })
       .addCase(addTask.fulfilled, (state:any, action:any) => {
         state.loading = false;
-        state.tasks.push(action.payload); // Agrega la nueva tarea al estado
+        state.tasks.push(action.payload); 
       })
       .addCase(addTask.rejected, (state:any, action) => {
         state.loading = false;

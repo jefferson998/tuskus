@@ -25,22 +25,19 @@ const Navbar = () => {
 
   return (
     <div className="bg-primary-dark fixed top-0 left-0 right-0 flex items-center justify-between p-4 shadow-md z-50">
-      {/* Logo */}
       <h1 className="text-4xl font-bold text-primary-light tracking-wide cursor-pointer">
         Tusks
       </h1>
 
-      {/* Navigation Links */}
+      
       <div className="hidden md:flex space-x-6">
         <Link to="/user-tasks" className="text-white text-lg hover:text-gray-300 transition">
           Tareas
         </Link>
-        {/* <Link to="/profile" className="text-white text-lg hover:text-gray-300 transition">
-          Perfil
-        </Link> */}
+      
       </div>
 
-      {/* Right-side actions (Logout) */}
+     
       <div className="hidden md:flex items-center">
         <button
           onClick={handleLogout}
@@ -49,7 +46,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu Button */}
       <div className="md:hidden flex items-center">
         <MobileMenu />
       </div>
@@ -57,24 +53,21 @@ const Navbar = () => {
   );
 };
 
-// Mobile menu component
+
 const MobileMenu = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [cookies, , removeCookie] = useCookies();
-  const dispatch = useDispatch(); // Para despachar la acción de logout
+  const dispatch = useDispatch(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
     console.log("cerrar sesión");
     console.log(cookies.token);
     
-    // Eliminar la cookie de token
     removeCookie('token');
 
-    // Despachar la acción de logout de Redux (opcional, si tienes lógica para manejar el estado de autenticación)
     dispatch(logout());
 
-    // Redirigir a la página de inicio de sesión
     navigate('/sign-in');
   };
 

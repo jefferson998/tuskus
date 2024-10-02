@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { TOKEN_SECRET } from "../config";
 import { createAccessToken } from "../libs/jwt";
 import { Request, Response } from "express";
+import {ENV} from '../config'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -37,7 +38,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
+      httpOnly: ENV !== "development",
       secure: true,
       sameSite: "none",
     });
@@ -61,7 +62,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (!userFound) {
       res.status(400).json({
         message: ["The email does not exist"],
-      });
+      })
       return; // Salir después de enviar la respuesta
     }
 
@@ -79,7 +80,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
+      httpOnly: ENV !== "development",
       secure: true,
       sameSite: "none",
     });

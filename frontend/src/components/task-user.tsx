@@ -17,8 +17,8 @@ function TaskUserPage() {
   const [newDescription, setNewDescription] = useState("");
   const [newProgreso, setNewProgreso] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // Nuevo estado para controlar si estamos editando
-  const [editTaskId, setEditTaskId] = useState<string | null>(null); // Guardar el ID de la tarea que se está editando
+  const [isEditing, setIsEditing] = useState(false); 
+  const [editTaskId, setEditTaskId] = useState<string | null>(null); 
   const navigate = useNavigate();
   const [cookie] = useCookies();
   const dispatch: AppDispatch = useDispatch();
@@ -28,7 +28,9 @@ function TaskUserPage() {
   );
 
   useEffect(() => {
+    console.log("token this "+cookie.token);
     if (!cookie.token) {
+
       navigate("/sign-in");
     } else {
       dispatch(fetchTasks(cookie.token));
@@ -40,7 +42,6 @@ function TaskUserPage() {
     
     try {
       if (isEditing && editTaskId) {
-        // Si estamos editando, realizar la actualización
         await axios.put(
           `${URL_API}/api/tasks/${editTaskId}`,
           {
@@ -55,7 +56,6 @@ function TaskUserPage() {
           }
         );
       } else {
-        // Si no estamos editando, agregar una nueva tarea
         await dispatch(
           addTask({
             title: newTitle,
@@ -66,13 +66,12 @@ function TaskUserPage() {
         );
       }
 
-      // Limpiar campos y cerrar el modal
       setNewTitle("");
       setNewDescription("");
       setNewProgreso("");
       setModalOpen(false);
-      setIsEditing(false); // Reiniciar estado de edición
-      dispatch(fetchTasks(cookie.token)); // Recargar tareas
+      setIsEditing(false); 
+      dispatch(fetchTasks(cookie.token));
     } catch (error) {
       console.error("Error saving task:", error);
     }
@@ -85,7 +84,7 @@ function TaskUserPage() {
           token: cookie.token,
         },
       });
-      dispatch(fetchTasks(cookie.token)); // Recargar tareas después de eliminar
+      dispatch(fetchTasks(cookie.token)); 
     } catch (error) {
       console.error("Error deleting task:", error);
     }
@@ -97,9 +96,9 @@ function TaskUserPage() {
       setNewTitle(task.title);
       setNewDescription(task.description);
       setNewProgreso(task.progress);
-      setEditTaskId(taskId); // Establecer la tarea que se va a editar
+      setEditTaskId(taskId); 
       setIsEditing(true);
-      setModalOpen(true); // Abrir el modal
+      setModalOpen(true); 
     }
   };
 
@@ -110,7 +109,7 @@ function TaskUserPage() {
         <button
           onClick={() => {
             setModalOpen(true);
-            setIsEditing(false); // No estamos editando al agregar una tarea
+            setIsEditing(false); 
           }}
           className="bg-primary-light/95 hover:bg-primary-light text-white/90 px-4 py-2 rounded-md transition"
         >
@@ -120,7 +119,7 @@ function TaskUserPage() {
         {modalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-primary-dark bg-opacity-50 z-50">
             <div className="bg-primary-dark p-6 rounded-lg shadow-lg w-96">
-              <div className="flex justify-between -z-1">
+              <div className="flex justify-between -z-1" >
                 <h2 className="text-xl font-bold mb-4 text-white/80">
                   {isEditing ? "Editar Tarea" : "Agregar Nueva Tarea"}
                 </h2>
@@ -204,19 +203,21 @@ function TaskUserPage() {
                   className="bg-primary-dark/80 p-2 my-2 rounded-lg shadow-xl relative"
                 >
                   <div className="flex justify-between">
-                    <h3 className="text-xl font-semibold text-white/85">
+                    <h3 test-id={`${task._id}`} className="text-xl font-semibold text-white/85">
                       {task.title}
                     </h3>
                     <div className="flex">
                       <button
                         onClick={() => editTask(task._id)}
                         className="hover:text-white/70 text-white/60 px-2.5 py-1.5 rounded-md transition"
+                        test-id={`edit_${task._id}`}
                       >
                         <BiEdit />
                       </button>
                       <button
                         onClick={() => deleteTask(task._id)}
                         className="hover:text-white/70 text-white/60 px-2.5 py-1.5 rounded-md transition"
+                        test-id={`delete_${task._id}`}
                       >
                         <TbTrash />
                       </button>
