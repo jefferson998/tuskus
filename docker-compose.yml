@@ -17,7 +17,8 @@ services:
     command: >
       sh -c "
       npm run build &
-      npm run start
+      npm run start &
+      npm run test
       "
 
   frontend:
@@ -35,5 +36,6 @@ services:
     command: >
       sh -c "
       npm run build &
-      npm run preview
+      npm run preview &
+      npm run test
       "
