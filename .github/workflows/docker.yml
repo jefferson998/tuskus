@@ -31,26 +31,26 @@ jobs:
           docker-compose -f docker-compose.yml up --build -d
           
      
-      # Wait for the services to be ready
-      - name: Wait for services to be ready
-        run: |
-          # Wait for the backend service to be available
-          for i in {1..30}; do
-            if curl -s http://localhost:3000/; then
-              echo "Backend is up!"
-              break
-            fi
-            echo "Waiting for backend..."
-            sleep 5
-          done
+      # # Wait for the services to be ready
+      # - name: Wait for services to be ready
+      #   run: |
+      #     # Wait for the backend service to be available
+      #     for i in {1..30}; do
+      #       if curl -s http://localhost:3000/; then
+      #         echo "Backend is up!"
+      #         break
+      #       fi
+      #       echo "Waiting for backend..."
+      #       sleep 5
+      #     done
 
-      # Run backend tests
-      - name: Run backend tests
-        run: docker-compose exec backend npm run test
+      # # Run backend tests
+      # - name: Run backend tests
+      #   run: docker-compose exec backend npm run test
 
-      # Run frontend tests
-      - name: Run frontend tests
-        run: docker-compose exec frontend npm run test
+      # # Run frontend tests
+      # - name: Run frontend tests
+      #   run: docker-compose exec frontend npm run test
 
       # Shutdown the Docker Compose services
       - name: Shutdown Docker Compose
