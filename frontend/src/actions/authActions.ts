@@ -4,7 +4,8 @@ import { URL_API } from '../config';
 export const registerUser = (userData: any) => async (dispatch: any) => {
     try {
       dispatch({ type: 'REGISTER_REQUEST' });
-  
+      
+      
       const response = await axios.post(`${URL_API}/api/auth/register`, userData);
       
   
