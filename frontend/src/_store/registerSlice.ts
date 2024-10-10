@@ -32,6 +32,7 @@ export const registerUser = createAsyncThunk<RegisterResponse, RegisterCredentia
     async (credentials, { rejectWithValue }) => {
       try {
         const api = URL_API;
+        console.log("🚀 ~ api:", api)
         const response = await axios.post<RegisterResponse>(`${api}/api/auth/register`, credentials);
         return response.data; 
       } catch (error: unknown) {

@@ -2,24 +2,21 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
-import { logout } from '../_store/authSlice'; // Asegúrate de que la ruta sea correcta
+import { logout } from '../_store/authSlice';
 
 const Navbar = () => {
   const [cookies, , removeCookie] = useCookies();
-  const dispatch = useDispatch(); // Para despachar la acción de logout
+  const dispatch = useDispatch(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
     console.log("cerrar sesión");
     console.log(cookies.token);
     
-    // Eliminar la cookie de token
     removeCookie('token'); 
 
-    // Despachar la acción de logout de Redux (opcional, si tienes lógica para manejar el estado de autenticación)
     dispatch(logout());
 
-    // Redirigir a la página de inicio de sesión
     navigate('/sign-in'); 
   };
 

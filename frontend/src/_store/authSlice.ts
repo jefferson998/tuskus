@@ -23,6 +23,8 @@ export const login = createAsyncThunk<LoginResponse, LoginCredentials, { rejectV
   async (credentials, { rejectWithValue }) => {
     try {
       const api = URL_API;
+      console.log("🚀 ~ api:", api)
+      
       const response = await axios.post<LoginResponse>(`${api}/api/auth/login`, credentials);
       return response.data; 
     } catch (error:any) {
