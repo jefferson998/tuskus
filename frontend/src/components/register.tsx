@@ -1,26 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../_store/registerSlice'; // Ensure this path is correct
-import { useCookies } from 'react-cookie';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../_store/registerSlice"; 
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch } from '../_store';
+import { AppDispatch } from "../_store";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+
 
 function RegisterPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordMatchError, setPasswordMatchError] = useState(""); // State for password mismatch error
+  const [passwordMatchError, setPasswordMatchError] = useState(""); 
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const [, setCookie] = useCookies();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, error, success, token } = useSelector((state: any) => state.register);
+  const { loading, error, success, token } = useSelector(
+    (state: any) => state.register
+  );
 
   useEffect(() => {
     if (token) {
-      setCookie('token', token);
-      navigate('/user-tasks');
+      setCookie("token", token);
+      navigate("/user-tasks");
     }
   }, [token, setCookie, navigate]);
 
@@ -37,19 +43,18 @@ function RegisterPage() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setPasswordMatchError("Passwords do not match."); 
+      setPasswordMatchError("Passwords do not match.");
       return;
     }
 
-   
     setPasswordMatchError("");
 
     if (!isFormValid()) {
-      return; 
+      return;
     }
 
     const userData = { username, email, password };
-    dispatch(registerUser(userData)); 
+    dispatch(registerUser(userData));
   };
 
   return (
@@ -66,9 +71,11 @@ function RegisterPage() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleRegister} className="space-y-6">
-          {/* Input para Username */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium leading-6 text-white/80">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium leading-6 text-white/80"
+            >
               Username
             </label>
             <div className="mt-2">
@@ -77,7 +84,7 @@ function RegisterPage() {
                 name="username"
                 type="text"
                 required
-                placeholder='tusks123'
+                placeholder="tusks123"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
@@ -87,7 +94,10 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-white/80">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 text-white/80"
+            >
               Email address
             </label>
             <div className="mt-2">
@@ -96,7 +106,7 @@ function RegisterPage() {
                 name="email"
                 type="email"
                 required
-                placeholder='correo@email.com'
+                placeholder="correo@email.com"
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -107,30 +117,42 @@ function RegisterPage() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between ">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-white/80">
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-white/80"
+              >
                 Password
               </label>
             </div>
-            <div className="mt-2">
+            <div className="relative mt-2">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
-                placeholder='Password1234'
+                placeholder="Password1234"
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
+                className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md pr-12"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-white/70 hover:text-white focus:outline-none"
+              >
+                {showPassword ? <FaRegEyeSlash size={20} />:<FaRegEye size={20} /> }
+              </button>
             </div>
           </div>
-
           <div>
             <div className="flex items-center justify-between">
-              <label htmlFor="confirm-password" className="block text-sm font-medium leading-6 text-white/80">
+              <label
+                htmlFor="confirm-password"
+                className="block text-sm font-medium leading-6 text-white/80"
+              >
                 Confirm Password
               </label>
             </div>
@@ -139,7 +161,7 @@ function RegisterPage() {
                 id="confirm-password"
                 name="confirm-password"
                 type="password"
-                placeholder='Password1234'
+                placeholder="Password1234"
                 required
                 autoComplete="current-password"
                 value={confirmPassword}
@@ -154,17 +176,30 @@ function RegisterPage() {
             <button
               type="submit"
               disabled={loading || !isFormValid()}
-              className={`flex w-full justify-center rounded-md ${loading ? 'bg-gray-500' : (isFormValid() ? 'bg-primary-light/90' : 'bg-primary-dark')} px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+              className={`flex w-full justify-center rounded-md ${
+                loading
+                  ? "bg-gray-500"
+                  : isFormValid()
+                  ? "bg-primary-light/90"
+                  : "bg-primary-dark"
+              } px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
               {loading ? "Loading ..." : "Register"}
             </button>
           </div>
         </form>
-
-        {error && <p className="mt-4 text-center text-sm text-red-500">{error}</p>}
-        {success && <p className="mt-4 text-center text-sm text-green-500">{success}</p>}
-        {passwordMatchError && <p className="mt-4 text-center text-sm text-red-500">{passwordMatchError}</p>} {/* Display password match error */}
-
+        {error && (
+          <p className="mt-4 text-center text-sm text-red-500">{error}</p>
+        )}
+        {success && (
+          <p className="mt-4 text-center text-sm text-green-500">{success}</p>
+        )}
+        {passwordMatchError && (
+          <p className="mt-4 text-center text-sm text-red-500">
+            {passwordMatchError}
+          </p>
+        )}{" "}
+        {/* Display password match error */}
         <p className="mt-10 text-center text-sm text-white/80">
           Already a member?{" "}
           <a

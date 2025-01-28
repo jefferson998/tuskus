@@ -7,9 +7,11 @@ import { Request, Response } from "express";
 import {ENV} from '../config'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
+  console.log("🚀 ~ register ~ req:", req)
   try {
     const { username, email, password } = req.body;
-
+    console.log("🚀 ~ register ~ username:", username)
+    
     const userFound = await User.findOne({ email });
 
     if (userFound) {
