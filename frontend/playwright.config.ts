@@ -4,7 +4,7 @@ dotenv.config();
 
 export default defineConfig({
   use: {
-    headless: false, 
+    headless: true, 
     screenshot: 'only-on-failure', 
     trace: 'on-first-retry', 
   },
