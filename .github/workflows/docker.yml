@@ -29,17 +29,17 @@ jobs:
 
       - name: Get Backend IP and Test Connectivity
         run: |
-          # Obtener IP del contenedor backend
+          # Obtener IP del backend
           BACKEND_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' backend-tuskus)
-          echo "🔌 IP del Backend: $BACKEND_IP"
-          
-          # Verificar conectividad desde el frontend
-          echo "🔄 Probando conexión al backend desde el frontend..."
-          docker-compose exec frontend curl -v http://$BACKEND_IP:3000/api/healthcheck
-          
-          # Mostrar logs de red
-          echo "🌐 Configuración de red completa:"
-          docker network inspect $(docker network ls -q -f name=$(docker-compose ps --services | xargs | sed 's/ /,/g'))
+          echo "🔌 Backend IP: $BACKEND_IP"
+
+          # Verificar conectividad SIN TTY
+          echo "🔄 Probando conexión desde frontend (sin TTY)..."
+          docker-compose exec -T frontend curl -v http://backend:3000/api/healthcheck
+
+          # Alternativa usando docker run
+          echo "🔍 Método alternativo:"
+          docker run --network container:frontend-tuskus curlimages/curl -v http://backend:3000/api/healthcheck
       
       - name: Run frontend tests
         run: |
