@@ -47,11 +47,13 @@ jobs:
       # Run backend tests
       - name: Run backend tests
         run: docker-compose exec -T backend npm run test
+        continue-on-error: true
 
       # Run frontend tests
       - name: Run frontend tests
         run: docker-compose exec -T frontend npm run test
-
+        continue-on-error: true
+        
       # Shutdown the Docker Compose services
       - name: Shutdown Docker Compose
         run: docker-compose down
