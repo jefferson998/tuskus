@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
 
     steps:
@@ -35,12 +36,26 @@ jobs:
         run: |
           docker cp $(docker-compose ps -q frontend):/app/playwright-report ./playwright-report
 
-      - name: Upload Playwright report as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-html-report
-          path: playwright-report
-          retention-days: 7
+      - name: Deploy Playwright Report to GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Clonar solo la rama gh-pages en un directorio temporal
+          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }} gh-pages
+          
+          # Copiar el nuevo reporte al repositorio
+          rm -rf gh-pages/*
+          cp -r playwright-report/* gh-pages/
+          
+          # Subir cambios
+          cd gh-pages
+          git add .
+          git commit -m "Update Playwright Report 🚀"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run backend tests
         run: docker-compose exec -T backend npm run test
         continue-on-error: true
