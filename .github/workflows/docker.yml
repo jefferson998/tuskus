@@ -33,9 +33,6 @@ jobs:
       - name: Run frontend tests
         run: docker-compose exec -T frontend npm run test
         continue-on-error: true
-      - name: Report Playwright test results
-        run: docker-compose exec -T frontend npm run report
-        continue-on-error: true
       - name: Copy Playwright report from container
         run: |
           docker cp $(docker-compose ps -q frontend):/app/playwright-report ./playwright-report
