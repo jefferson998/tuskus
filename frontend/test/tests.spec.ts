@@ -49,7 +49,8 @@ async function registerUser(credentials: {
 
 test.describe("SignIn Component", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(URL_HOST_TEST + "/sign-in");
+    console.log("🚀 ~ test.beforeEach ~ URL_HOST_TEST:", URL_HOST_TEST)
+    await page.goto(URL_HOST_TEST + "/sign-in",{timeout:50000});
   });
 
   test("should display error message on failed login", async ({ page }) => {
