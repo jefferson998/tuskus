@@ -5,14 +5,11 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../_store/authSlice';
 
 const Navbar = () => {
-  const [cookies, , removeCookie] = useCookies();
+  const [, , removeCookie] = useCookies();
   const dispatch = useDispatch(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("cerrar sesión");
-    console.log(cookies.token);
-    
     removeCookie('token'); 
 
     dispatch(logout());
@@ -25,7 +22,6 @@ const Navbar = () => {
       <h1 className="text-4xl font-bold text-primary-light tracking-wide cursor-pointer">
         Tusks
       </h1>
-
       
       <div className="hidden md:flex space-x-6">
         <Link to="/user-tasks" className="text-white text-lg hover:text-gray-300 transition">
@@ -53,18 +49,13 @@ const Navbar = () => {
 
 const MobileMenu = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [cookies, , removeCookie] = useCookies();
+  const [, , removeCookie] = useCookies();
   const dispatch = useDispatch(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("cerrar sesión");
-    console.log(cookies.token);
-    
     removeCookie('token');
-
     dispatch(logout());
-
     navigate('/sign-in');
   };
 

@@ -44,13 +44,13 @@ jobs:
       #       sleep 5
       #     done
 
-      # # Run backend tests
-      # - name: Run backend tests
-      #   run: docker-compose exec backend npm run test
+      # Run backend tests
+      - name: Run backend tests
+        run: docker-compose exec backend npm run test
 
-      # # Run frontend tests
-      # - name: Run frontend tests
-      #   run: docker-compose exec frontend npm run test
+      # Run frontend tests
+      - name: Run frontend tests
+        run: docker-compose exec frontend npm run test
 
       # Shutdown the Docker Compose services
       - name: Shutdown Docker Compose

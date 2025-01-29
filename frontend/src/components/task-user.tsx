@@ -28,9 +28,7 @@ function TaskUserPage() {
   );
 
   useEffect(() => {
-    console.log("token this "+cookie.token);
     if (!cookie.token) {
-
       navigate("/sign-in");
     } else {
       dispatch(fetchTasks(cookie.token));

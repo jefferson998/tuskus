@@ -43,8 +43,6 @@ test.describe("SignIn Component", () => {
     await page.click('button[type="submit"]');
 
     const errorMessage = await page.locator(".bg-red-600");
-    console.log("errorMessage " + errorMessage);
-
     await expect(errorMessage).toBeVisible();
     await expect(errorMessage).toHaveText(/The email does not exist/i); // Ajusta según el mensaje esperado
   });

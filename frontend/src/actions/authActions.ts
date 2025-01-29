@@ -19,11 +19,7 @@ export const registerUser = (userData: any) => async (dispatch: any) => {
   
       return response.data.token;
     } catch (error: any) {
-      console.error("Registration error:", error);
-      console.log();
-      
-      console.log("response "+JSON.stringify(error.response.data.message[0]));
-          
+      console.error("Registration error:", error);          
       const errorMessage =
       error.response.data.message[0] || 
         error.message || 

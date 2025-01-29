@@ -15,10 +15,7 @@ function SignIn() {
   const [, setCookie] = useCookies();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { error, success, loading, token } = useSelector((state:RootState) => state.auth); 
-
-  console.log("error "+error);
-  
+  const { error, success, loading, token } = useSelector((state:RootState) => state.auth);   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(clearMessages()); 
