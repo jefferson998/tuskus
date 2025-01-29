@@ -18,7 +18,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - VITE_URL_API=http://localhost:3000
+      - VITE_URL_API=http://backend:3000
       - VITE_URL_HOST=http://localhost:8080
       - EMAIL_TEST=paz@gmail.com
       - PASSWORD_TEST=Secret1234*
@@ -28,3 +28,7 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+
+networks:
+  tuskus-network:
+    driver: bridge
