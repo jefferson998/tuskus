@@ -1,16 +1,8 @@
-FROM node:20
-
+FROM node:16
 WORKDIR /app
-
 COPY package*.json ./
-
 RUN npm install
-
 COPY . .
-
-
 RUN npm run build
-
 EXPOSE 3000
-
-CMD ["node", "src/server.ts"]
+CMD ["npm", "run","dev"]

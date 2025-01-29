@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, clearMessages } from "../_store/authSlice"; // Asegúrate de la ruta correcta
+import { login, clearMessages } from "../_store/authSlice"; 
 import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../_store";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -11,8 +13,9 @@ function SignIn() {
   const dispatch:AppDispatch = useDispatch();
   const navigate = useNavigate();
   const [, setCookie] = useCookies();
-  
-  const { error, success, loading, token } = useSelector((state:RootState) => state.auth); // Selecciona el estado de autenticación
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { error, success, loading, token } = useSelector((state:RootState) => state.auth); 
 
   console.log("error "+error);
   
@@ -72,11 +75,11 @@ function SignIn() {
                 Password
               </label>
             </div>
-            <div className="mt-2">
+            <div className="relative mt-2">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 placeholder="Password1234*"
                 autoComplete="current-password"
@@ -84,13 +87,21 @@ function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md  rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-white/70 hover:text-white focus:outline-none"
+              >
+                {showPassword ? <FaRegEyeSlash size={20} />:<FaRegEye size={20} /> }
+              </button>
             </div>
+
           </div>
 
           <div>
             <button
               type="submit"
-              disabled={!isFormValid || loading} // Desactiva el botón si el formulario no es válido o está cargando
+              disabled={!isFormValid || loading}
               className={`flex w-full justify-center rounded-md ${isFormValid && !loading ? 'bg-light/90 hover:bg-light' : 'bg-gray-600 cursor-not-allowed'} px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
               {loading ? "Loading..." : "Sign in"}

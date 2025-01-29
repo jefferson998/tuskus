@@ -9,6 +9,9 @@ const config_1 = require("../config");
 async function createAccessToken(payload) {
     return new Promise((resolve, reject) => {
         const options = { expiresIn: "1d" };
+        if (!config_1.TOKEN_SECRET) {
+            return reject(new Error("Server error, please try again"));
+        }
         jsonwebtoken_1.default.sign(payload, config_1.TOKEN_SECRET, options, (err, token) => {
             if (err)
                 return reject(err);

@@ -11,8 +11,10 @@ const config_1 = require("../config");
 const jwt_1 = require("../libs/jwt");
 const config_2 = require("../config");
 const register = async (req, res) => {
+    console.log("🚀 ~ register ~ req:", req);
     try {
         const { username, email, password } = req.body;
+        console.log("🚀 ~ register ~ username:", username);
         const userFound = await user_model_1.default.findOne({ email });
         if (userFound) {
             res.status(400).json({
@@ -97,6 +99,9 @@ const verifyToken = async (req, res) => {
     }
     // Verificar el token
     try {
+        if (!config_1.TOKEN_SECRET) {
+            throw new Error("Server error, please try again");
+        }
         const user = jsonwebtoken_1.default.verify(token, config_1.TOKEN_SECRET);
         // Buscar el usuario en la base de datos
         const userFound = await user_model_1.default.findById(user.id);

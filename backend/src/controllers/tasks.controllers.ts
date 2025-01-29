@@ -36,9 +36,6 @@ export const deleteTask = async (req: any, res: Response):Promise<void> => {
     }else{
       res.sendStatus(204);
     }
-       
-
-    
   } catch (error:any) {
     res.status(500).json({ message: error.message });
     return
@@ -68,8 +65,6 @@ export const getTask = async (req: Request, res: Response): Promise<void> => {
     }else{
       res.json(task);
     }
-    
-     
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

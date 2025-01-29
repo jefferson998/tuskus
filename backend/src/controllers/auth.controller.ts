@@ -18,23 +18,17 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({
         message: ["The email is already in use"],
       });
-      return; // Asegúrate de salir después de enviar la respuesta
+      return;
     }
-
-    // Hashing the password
     const passwordHash = await bcrypt.hash(password, 10);
-
-    // Creating the user
     const newUser = new User({
       username,
       email,
       password: passwordHash,
     });
 
-    // Saving the user in the database
     const userSaved = await newUser.save();
 
-    // Create access token
     const token = await createAccessToken({
       id: userSaved?._id.toString(),
     });
@@ -65,7 +59,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({
         message: ["The email does not exist"],
       })
-      return; // Salir después de enviar la respuesta
+      return;
     }
 
     const isMatch = await bcrypt.compare(password, userFound.password);
@@ -73,11 +67,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({
         message: ["The password is incorrect"],
       });
-      return; // Salir después de enviar la respuesta
+      return; 
     }
 
     const token = await createAccessToken({
-      id: userFound?._id.toString(),  // Convertir a string si es necesario
+      id: userFound?._id.toString(),  
       username: userFound?.username,
     });
 
@@ -101,22 +95,21 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const verifyToken = async (req: Request, res: Response): Promise<void> => {
   const { token } = req.cookies;
 
-  // Verificar si hay un token
   if (!token) {
     res.status(401).json({ message: "No token provided" });
   }
 
-  // Verificar el token
   try {
-    const user = jwt.verify(token, TOKEN_SECRET) as { id: string };
+    if (!TOKEN_SECRET) {
+      throw new Error("Server error, please try again");
+    }
+    const user = jwt.verify(token, TOKEN_SECRET) as unknown as { id: string };
 
-    // Buscar el usuario en la base de datos
     const userFound = await User.findById(user.id);
     if (!userFound) {
      res.status(401).json({ message: "User not found" });
     }
 
-    // Retornar información del usuario
     res.json({
       id: userFound?._id,
       username: userFound?.username,

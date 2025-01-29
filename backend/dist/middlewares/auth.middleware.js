@@ -17,6 +17,9 @@ const auth = (req, res, next) => {
             res.status(401).json({ message: "No token, authorization denied" });
             return; // Detenemos aquí el flujo
         }
+        if (!config_1.TOKEN_SECRET) {
+            throw new Error("Server error, please try again");
+        }
         jsonwebtoken_1.default.verify(token, config_1.TOKEN_SECRET, (error, user) => {
             if (error) {
                 res.status(401).json({ message: "Token is not valid" });

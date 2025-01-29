@@ -8,7 +8,7 @@ interface LoginCredentials {
 }
 
 interface LoginResponse {
-  token: string; 
+  token: string;
 }
 
 interface AuthState {
@@ -18,40 +18,53 @@ interface AuthState {
   loading: boolean;
 }
 
+// 🚀 **Async Thunk para login**
 export const login = createAsyncThunk<LoginResponse, LoginCredentials, { rejectValue: string }>(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const api = URL_API;
-      console.log("🚀 ~ api:", api)
-      
-      const response = await axios.post<LoginResponse>(`${api}/api/auth/login`, credentials);
-      return response.data; 
-    } catch (error:any) {
-    
-      const axiosError:any = error as AxiosError;
-      return rejectWithValue(axiosError.response?.data.message || "Login failed!");
+      const response = await axios.post<LoginResponse>(
+        `${URL_API}/api/auth/login`,
+        credentials,
+        { withCredentials: true } // ✅ Permitir cookies si la API usa sesiones
+      );
+
+      // Guardar token en localStorage (si aplica)
+      localStorage.setItem('token', response.data.token);
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+
+      return rejectWithValue(
+        axiosError.response?.data?.message || "Login failed! Please try again."
+      );
     }
   }
 );
 
+// 🚀 **Estado inicial**
+const initialState: AuthState = {
+  token: localStorage.getItem('token') || null, // ✅ Persistencia
+  error: null,
+  success: null,
+  loading: false,
+};
+
+// 🚀 **Slice para autenticación**
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    token: null,
-    error: null,
-    success: null,
-    loading: false,
-  } as AuthState,
+  initialState,
   reducers: {
     clearMessages: (state) => {
       state.error = null;
       state.success = null;
     },
     logout: (state) => {
-      state.token = null; 
-      state.error = null; 
+      state.token = null;
+      state.error = null;
       state.success = null;
+      localStorage.removeItem('token'); // ✅ Eliminar token al hacer logout
     },
   },
   extraReducers: (builder) => {
@@ -63,12 +76,12 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<LoginResponse>) => {
         state.loading = false;
-        state.token = action.payload.token; 
+        state.token = action.payload.token;
         state.success = "Login successful!";
+        state.error = null;
       })
-      .addCase(login.rejected, (state, action: PayloadAction<string | undefined>) => {
+      .addCase(login.rejected, (state, action) => {
         state.loading = false;
-
         state.error = action.payload || "Login failed!";
       });
   },

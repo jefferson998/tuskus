@@ -4,7 +4,7 @@ import RegisterPage from "./components/register.tsx";
 import TaskUserPage from "./components/task-user.tsx";
 import { CookiesProvider } from "react-cookie";
 import { Provider } from 'react-redux';
-import store from './_store';
+import store from './_store/index.ts';
 
 
 function App() {

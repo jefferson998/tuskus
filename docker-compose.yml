@@ -1,41 +1,26 @@
-version: '3.8'
-
+version: '3'
 services:
   backend:
-    build:
-      context: ./backend
+    build: ./backend
     ports:
       - "3000:3000"
     environment:
       - MONGODB_URI=mongodb+srv://fitkro:lQ87dPzG6DCWUbwX@tuskusapi.dahkp.mongodb.net/tuskus?retryWrites=true&w=majority&appName=tuskusapi
       - ENV=docker
       - PORT=3000
-      - FRONTEND_URL=http://localhost:5173
+      - FRONTEND_URL=http://localhost:8080
       - JWT_SECRET=secret
-    volumes:
-      - ./backend:/app
-    command: >
-      sh -c "
-      npm run build &
-      npm run start &
-      npm run test
-      "
+    container_name: backend
+    restart: unless-stopped
 
   frontend:
-    build:
-      context: ./frontend
+    build: ./frontend
     ports:
       - "8080:8080"
     environment:
-      - URL_API=http://localhost:3000
-      - URL_HOST=http://localhost:8080
-    volumes:
-      - ./frontend:/app
+      - VITE_URL_API=http://localhost:4000
+      - VITE_URL_HOST=http://localhost:8080
+    container_name: frontend
+    restart: unless-stopped
     depends_on:
       - backend
-    command: >
-      sh -c "
-      npm run build &
-      npm run preview &
-      npm run test
-      "

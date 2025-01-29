@@ -18,6 +18,7 @@ function RegisterPage() {
   const navigate = useNavigate();
   const [, setCookie] = useCookies();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { loading, error, success, token } = useSelector(
     (state: any) => state.register
@@ -156,11 +157,11 @@ function RegisterPage() {
                 Confirm Password
               </label>
             </div>
-            <div className="mt-2">
+            <div className="relative mt-2">
               <input
                 id="confirm-password"
                 name="confirm-password"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Password1234"
                 required
                 autoComplete="current-password"
@@ -169,7 +170,15 @@ function RegisterPage() {
                 disabled={loading}
                 className="w-full h-full p-3 selection:text-white/95 text-white/95 focus:border-white/75 bg-primary-dark/90 placeholder:text-white/80 focus-visible:text-white/95 placeholder:text-md rounded-[5px] border-white/70 border-2 focus:outline-none decoration-transparent shadow-md"
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-3 flex items-center text-white/70 hover:text-white focus:outline-none"
+              >
+                {showConfirmPassword ? <FaRegEyeSlash size={20} />:<FaRegEye size={20} /> }
+              </button>
             </div>
+            
           </div>
 
           <div>
@@ -199,7 +208,6 @@ function RegisterPage() {
             {passwordMatchError}
           </p>
         )}{" "}
-        {/* Display password match error */}
         <p className="mt-10 text-center text-sm text-white/80">
           Already a member?{" "}
           <a

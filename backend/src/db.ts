@@ -4,6 +4,9 @@ import { MONGODB_URI } from "./config";
 export const connectDB = async () => {
   console.log("MONGODB_URI "+MONGODB_URI);
   
+  if (!MONGODB_URI) {
+    throw new Error("Server error, please try again");
+  }
   try {
     await mongoose.connect(MONGODB_URI);
     console.log("MongoDB is connected");

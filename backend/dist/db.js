@@ -8,6 +8,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("./config");
 const connectDB = async () => {
     console.log("MONGODB_URI " + config_1.MONGODB_URI);
+    if (!config_1.MONGODB_URI) {
+        throw new Error("Server error, please try again");
+    }
     try {
         await mongoose_1.default.connect(config_1.MONGODB_URI);
         console.log("MongoDB is connected");
