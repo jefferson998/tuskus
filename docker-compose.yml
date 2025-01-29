@@ -19,11 +19,11 @@ services:
       - "8080:8080"
     environment:
       - VITE_URL_API=http://backend:3000
-      - VITE_URL_HOST=http://frontend:8080
+      - VITE_URL_HOST=http://localhost:8080
       - EMAIL_TEST=paz@gmail.com
       - PASSWORD_TEST=Secret1234*
-      - URL_API_TEST=http://backend:3000
-      - URL_HOST_TEST=http://frontend:8080
+      - URL_API_TEST=http://localhost:3000
+      - URL_HOST_TEST=http://localhost:8080
     container_name: frontend-tuskus
     restart: unless-stopped
     depends_on:
