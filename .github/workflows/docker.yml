@@ -26,20 +26,6 @@ jobs:
       - name: Build and run Docker Compose services
         run: |
           docker-compose -f docker-compose.yml up --build -d
-
-      - name: Get Backend IP and Test Connectivity
-        run: |
-          # Obtener IP del backend
-          BACKEND_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' backend-tuskus)
-          echo "🔌 Backend IP: $BACKEND_IP"
-
-          # Verificar conectividad SIN TTY
-          echo "🔄 Probando conexión desde frontend (sin TTY)..."
-          docker-compose exec -T frontend curl -v http://backend:3000/api/healthcheck
-
-          # Alternativa usando docker run
-          echo "🔍 Método alternativo:"
-          docker run --network container:frontend-tuskus curlimages/curl -v http://backend:3000/api/healthcheck
       
       - name: Run frontend tests
         run: |
