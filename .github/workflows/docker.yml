@@ -27,6 +27,14 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml up --build -d
       
+      - name: Wait for services to be ready
+        run: |
+          sleep 10
+      
+      - name: Debug Backend Response
+        run: |
+          curl -I http://localhost:3000/api/auth/example
+
       - name: Run frontend tests
         run: |
           docker-compose exec -T frontend npm run test &
