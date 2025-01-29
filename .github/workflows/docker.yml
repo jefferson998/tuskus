@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and run Docker Compose services
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          docker-compose -f docker-compose.yml up --build
           
       - name: Run backend tests
         run: docker-compose exec -T backend npm run test
