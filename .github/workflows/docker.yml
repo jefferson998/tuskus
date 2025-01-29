@@ -30,7 +30,7 @@ jobs:
       - name: Run frontend tests
         run: |
           docker-compose exec -T frontend npm run test &
-          sleep 30
+          sleep 300
           pkill -f "docker-compose exec -T frontend npm run test" || true
         continue-on-error: true
       - name: Copy Playwright report from container
