@@ -26,10 +26,25 @@ jobs:
       - name: Build and run Docker Compose services
         run: |
           docker-compose -f docker-compose.yml up --build -d
+
+      - name: Get Backend IP and Test Connectivity
+        run: |
+          # Obtener IP del contenedor backend
+          BACKEND_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' backend-tuskus)
+          echo "🔌 IP del Backend: $BACKEND_IP"
+          
+          # Verificar conectividad desde el frontend
+          echo "🔄 Probando conexión al backend desde el frontend..."
+          docker-compose exec frontend curl -v http://$BACKEND_IP:3000/api/healthcheck
+          
+          # Mostrar logs de red
+          echo "🌐 Configuración de red completa:"
+          docker network inspect $(docker network ls -q -f name=$(docker-compose ps --services | xargs | sed 's/ /,/g'))
+      
       - name: Run frontend tests
         run: |
           docker-compose exec -T frontend npm run test &
-          sleep 300
+          sleep 30
           pkill -f "docker-compose exec -T frontend npm run test" || true
         continue-on-error: true
       - name: Copy Playwright report from container
