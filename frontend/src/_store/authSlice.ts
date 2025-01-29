@@ -18,7 +18,6 @@ interface AuthState {
   loading: boolean;
 }
 
-// 🚀 **Async Thunk para login**
 export const login = createAsyncThunk<LoginResponse, LoginCredentials, { rejectValue: string }>(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
@@ -26,10 +25,9 @@ export const login = createAsyncThunk<LoginResponse, LoginCredentials, { rejectV
       const response = await axios.post<LoginResponse>(
         `${URL_API}/api/auth/login`,
         credentials,
-        { withCredentials: true } // ✅ Permitir cookies si la API usa sesiones
+        { withCredentials: true } 
       );
 
-      // Guardar token en localStorage (si aplica)
       localStorage.setItem('token', response.data.token);
 
       return response.data;
@@ -43,15 +41,13 @@ export const login = createAsyncThunk<LoginResponse, LoginCredentials, { rejectV
   }
 );
 
-// 🚀 **Estado inicial**
 const initialState: AuthState = {
-  token: localStorage.getItem('token') || null, // ✅ Persistencia
+  token: localStorage.getItem('token') || null, 
   error: null,
   success: null,
   loading: false,
 };
 
-// 🚀 **Slice para autenticación**
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -64,7 +60,7 @@ const authSlice = createSlice({
       state.token = null;
       state.error = null;
       state.success = null;
-      localStorage.removeItem('token'); // ✅ Eliminar token al hacer logout
+      localStorage.removeItem('token'); 
     },
   },
   extraReducers: (builder) => {

@@ -42,7 +42,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Clonar solo la rama gh-pages en un directorio temporal
-          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }} gh-pages
+          git clone --depth=1 --branch=gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages
           
           # Copiar el nuevo reporte al repositorio
           rm -rf gh-pages/*
@@ -51,7 +51,7 @@ jobs:
           # Subir cambios
           cd gh-pages
           git add .
-          git commit -m "Update Playwright Report 🚀"
+          git commit -m "Update Playwright Report 🚀" || echo "No changes to commit"
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

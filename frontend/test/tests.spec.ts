@@ -7,11 +7,26 @@ const PASSWORD_TEST = process.env.PASSWORD_TEST;
 const URL_API_TEST = process.env.URL_API_TEST;
 const URL_HOST_TEST = process.env.URL_HOST_TEST;
 
-async function login(credentials: { email: string; password: string }) {
-  const api = URL_API_TEST;
-  const response = await axios.post(`${api}/api/auth/login`, credentials);
-  return response.data.token;
-}
+const login = async (credentials: { email: string; password: string }) => {
+  try {
+    const api = URL_API_TEST;
+    if (!api) throw new Error("URL_API_TEST is not defined");
+
+    const response = await axios.post(`${api}/api/auth/login`, credentials);
+    console.log("🚀 ~ login ~ response:", response);
+
+    return response.data.token;
+  } catch (error) {
+    console.error("Error during login:", error);
+    
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Login failed");
+    } else {
+      throw new Error("Unexpected error during login");
+    }
+  }
+};
+
 
 async function fetchTasks(token: string) {
   const response = await axios.get(`${URL_API_TEST}/api/tasks`, {
@@ -38,21 +53,21 @@ test.describe("SignIn Component", () => {
   });
 
   test("should display error message on failed login", async ({ page }) => {
-    await page.fill('input[name="email"]', "invalidemail@mail.com"); // Formato de email inválido
+    await page.fill('input[name="email"]', "invalidemail@mail.com"); 
     await page.fill('input[name="password"]', "wrongpassword");
     await page.click('button[type="submit"]');
 
     const errorMessage = await page.locator(".bg-red-600");
     await expect(errorMessage).toBeVisible();
-    await expect(errorMessage).toHaveText(/The email does not exist/i); // Ajusta según el mensaje esperado
+    await expect(errorMessage).toHaveText(/The email does not exist/i); 
   });
 
   test("should redirect on successful login", async ({ page }) => {
-    await page.fill('input[name="email"]', EMAIL_TEST); // Usa un email válido
+    await page.fill('input[name="email"]', EMAIL_TEST); 
     await page.fill('input[name="password"]', PASSWORD_TEST);
     await page.click('button[type="submit"]');
 
-    await page.waitForURL(URL_HOST_TEST + "/user-tasks"); // Ajusta la URL según sea necesario
+    await page.waitForURL(URL_HOST_TEST + "/user-tasks"); 
     await expect(page).toHaveURL(URL_HOST_TEST + "/user-tasks");
   });
 
@@ -123,13 +138,13 @@ test.describe("TaskUserPage Component", () => {
   });
 
   test("should delete a task", async ({ page }) => {
-    const credentials = { email: EMAIL_TEST, password: PASSWORD_TEST }; // Credenciales de prueba
+    const credentials = { email: EMAIL_TEST, password: PASSWORD_TEST }; 
     const token = await login(credentials);
 
     const tasks = await fetchTasks(token);
     const existingTask = tasks[0];
 
-    await page.click(`button[test-id="delete_${existingTask._id}"]`); // Haz clic en el botón de eliminar (ajusta el selector según corresponda)
+    await page.click(`button[test-id="delete_${existingTask._id}"]`); 
 
     await expect(
       page.locator(`button[test-id="delete_${existingTask._id}"]`)
@@ -142,7 +157,6 @@ test.describe("RegisterPage Component", () => {
     await page.goto(URL_HOST_TEST + "/register");
   });
 
-  // Test para el registro exitoso de un usuario
   test("should register a new user successfully", async ({ page }) => {
     const username = faker.internet.username();
     const email = faker.internet.email();
@@ -155,12 +169,10 @@ test.describe("RegisterPage Component", () => {
 
     await page.click('button[type="submit"]');
 
-    // Verificar que redirija correctamente tras el registro
     await page.waitForURL(`${URL_HOST_TEST}/user-tasks`);
     await expect(page).toHaveURL(`${URL_HOST_TEST}/user-tasks`);
   });
 
-  // Test para validar que las contraseñas coincidan
   test("should show error when passwords do not match", async ({ page }) => {
     const username = faker.internet.username();
     const email = faker.internet.email();
@@ -172,17 +184,15 @@ test.describe("RegisterPage Component", () => {
 
     await page.click('button[type="submit"]');
 
-    // Verificar que se muestra el mensaje de error
     const errorMessage = await page.locator("text=Passwords do not match.");
     await expect(errorMessage).toBeVisible();
   });
 
-  // Test para verificar manejo de errores cuando el correo ya está registrado
   test("should show error when email is already registered", async ({
     page,
   }) => {
     const username = faker.internet.username();
-    const email = "test@mail.com"; // Correo ya registrado
+    const email = "test@mail.com";
     const password = "Password1234*";
 
     await page.fill('input[name="username"]', username);
@@ -192,18 +202,15 @@ test.describe("RegisterPage Component", () => {
 
     await page.click('button[type="submit"]');
 
-    // Verificar que se muestra el mensaje de error cuando el correo ya existe
     const errorMessage = await page.locator("text=The email is already in use");
     await expect(errorMessage).toBeVisible();
   });
 
-  // Test para verificar que el botón de registro se deshabilita si el formulario está incompleto
   test("should disable submit button when form is invalid", async ({
     page,
   }) => {
     const submitButton = page.locator('button[type="submit"]');
 
-    // Antes de llenar los campos, el botón debe estar deshabilitado
     await expect(submitButton).toBeDisabled();
 
     await page.fill('input[name="username"]', "testuser");
@@ -216,7 +223,7 @@ test.describe("RegisterPage Component", () => {
     await expect(submitButton).toBeDisabled();
 
     await page.fill('input[name="confirm-password"]', "Password1234*");
-    await expect(submitButton).toBeEnabled(); // El botón se habilita cuando todo está lleno
+    await expect(submitButton).toBeEnabled(); 
   });
 });
 
