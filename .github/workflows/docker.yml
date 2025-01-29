@@ -24,16 +24,13 @@ jobs:
 
       - name: Build and run Docker Compose services
         run: |
-          docker-compose -f docker-compose.yml up --build
+          docker-compose -f docker-compose.yml up --build -d
       - name: Run frontend tests
-        run: docker-compose exec -T frontend npm run test || true
-        continue-on-error: true  
-          
-      - name: Run backend tests
-        run: docker-compose exec -T backend npm run test
+        run: |
+          docker-compose exec -T frontend npm run test &
+          sleep 300
+          pkill -f "docker-compose exec -T frontend npm run test" || true
         continue-on-error: true
-
-     
       - name: Copy Playwright report from container
         run: |
           docker cp $(docker-compose ps -q frontend):/app/playwright-report ./playwright-report
@@ -44,6 +41,9 @@ jobs:
           name: playwright-html-report
           path: playwright-report
           retention-days: 7
+      - name: Run backend tests
+        run: docker-compose exec -T backend npm run test
+        continue-on-error: true
 
       - name: Shutdown Docker Compose
         run: docker-compose down
