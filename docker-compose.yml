@@ -23,7 +23,7 @@ services:
       - EMAIL_TEST=paz@gmail.com
       - PASSWORD_TEST=Secret1234*
       - URL_API_TEST=https://tuskus.vercel.app
-      - URL_HOST_TEST=https://tuskus-frontend.vercel.app
+      - URL_HOST_TEST=http://localhost:8080
     container_name: frontend-tuskus
     restart: unless-stopped
     depends_on:
