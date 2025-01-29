@@ -8,7 +8,7 @@ services:
       - MONGODB_URI=mongodb+srv://fitkro:lQ87dPzG6DCWUbwX@tuskusapi.dahkp.mongodb.net/tuskus?retryWrites=true&w=majority&appName=tuskusapi
       - ENV=docker
       - PORT=3000
-      - FRONTEND_URL=http://frontend:8080
+      - FRONTEND_URL=http://localhost:8080
       - JWT_SECRET=secret
     container_name: backend-tuskus
     restart: unless-stopped
@@ -18,12 +18,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - VITE_URL_API=http://backend:3000
+      - VITE_URL_API=http://localhost:3000
       - VITE_URL_HOST=http://localhost:8080
       - EMAIL_TEST=paz@gmail.com
       - PASSWORD_TEST=Secret1234*
-      - URL_API_TEST=http://localhost:3000
-      - URL_HOST_TEST=http://localhost:8080
+      - URL_API_TEST=https://tuskus.vercel.app
+      - URL_HOST_TEST=https://tuskus-frontend.vercel.app
     container_name: frontend-tuskus
     restart: unless-stopped
     depends_on:
