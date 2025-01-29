@@ -5,7 +5,7 @@ dotenv.config();
 
 export default defineConfig({
   use: {
-    headless: false, //true or false
+    headless: true, //true or false
   },
   reporter: [
     ['list'],
